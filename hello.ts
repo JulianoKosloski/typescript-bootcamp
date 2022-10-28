@@ -119,3 +119,103 @@ console.log(
 
 let secretCode: number | string; 
 //union types can be used to avoid errors, but type-specific methods need to be carefully used, such as String's toUpperCase()
+
+// -------------------------------FUNCTIONS---------------------------------
+
+function getTime() : number { //return types can also be defined (very similar to python type suggestions)
+    return new Date().getTime();
+}
+
+function reverseString(s:string) : string { //can use void if there's no return type
+    let reversed : string = "";
+
+    let i:number;
+    for(i = (s.length - 1); i >= 0; i--) {
+        reversed = reversed + s[i];
+    }
+    console.log(reversed);
+    return reversed;
+}
+
+reverseString("hello");
+reverseString("world");
+reverseString("this");
+reverseString("is");
+reverseString("reversed");
+
+// -------------------------------TYPE CASTING---------------------------------
+
+let myText: unknown = 'morgoth'; //can only use as when the value actually reflects the casted type
+console.log("This is the length of the number " + (myText as string).length)
+//or
+console.log("This is the length of the number " + (<string>myText).length)
+
+// -------------------------------CLASSES---------------------------------
+
+class Product {
+    private readonly id: number;
+    private price: number;
+    private name: string;
+
+    public constructor(id: number, price: number, name: string) {
+        this.id = id;
+        this.price = price;
+        this.name = name;
+    }
+
+    public isCheap(): boolean{
+        return this.price < 10
+    }
+}
+
+class Toy extends Product {
+    aboveAge: number;
+
+    public constructor(id: number, price: number, name: string, aboveAge: number) {
+        super(id, price, name);
+        this.aboveAge = aboveAge;
+    }
+
+    public underFiveAppropriate():void {
+        if (this.aboveAge >= 5) {
+            console.log("Not appropriate")
+        } else {
+            console.log("Indeed appropriate")
+        }
+    }
+}
+
+let beyblade = new Toy(1, 9, "Beyblade", 7);
+console.log("Is this cheap? " + beyblade.isCheap());
+beyblade.underFiveAppropriate();
+
+// -------------------------------GENERICS AND UTILITY TYPES---------------------------------
+
+function nameAge<N, A>(name: N, age: A):void {
+    console.log("This is " + name + ", " + age);
+}
+
+nameAge<string, number>("Bob", 23);
+nameAge<string, string>("Thor", "28");
+nameAge<number, string>(37721, "stronk");
+
+interface Movie { //this interface has defined types
+    title: string,
+    duration?: number,
+    genre: string
+}
+// I can use an utility type such as Partial do make it so that the types are no longer necessary
+
+let curupira: Partial<Movie> = {};
+
+let sharknado: Movie = {
+    title: "Sharknado",
+    duration: 121,
+    genre: "Amazing"
+}
+
+curupira.title = "Curupira"; //no longer needed to provide all properties
+
+if (sharknado.duration >= 120) {
+    console.log("This movie is too long");
+}
